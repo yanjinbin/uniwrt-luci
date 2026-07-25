@@ -15,7 +15,7 @@
 
 set -eu
 
-REPO="${UNIWRT_REPO:-yanjinbin/uniwrt-luci}"
+REPO="${UNIWRT_REPO:-ox1d3x3/uniwrt-luci}"
 TAG="latest"
 ACTIVATE=0
 GITHUB_PROXY="${GITHUB_PROXY:-https://gh-proxy.com/}"
@@ -36,7 +36,7 @@ usage() {
 
 	Environment:
 	  GITHUB_PROXY=https://gh-proxy.com/  prefix used for GitHub/raw/API downloads
-	  UNIWRT_REPO=owner/repo              release repository to query
+	  UNIWRT_REPO=owner/repo              release repository to query, default upstream
 	EOF
 }
 
