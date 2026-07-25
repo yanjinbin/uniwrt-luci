@@ -7,6 +7,7 @@
 #
 # Optional:
 #   ... | sh -s -- --activate
+#   ... | sh -s -- --upgrade
 #   ... | sh -s -- v2.0.34
 #   ... | sh -s -- v2.0.34 --activate
 #
@@ -18,6 +19,7 @@ set -eu
 REPO="${UNIWRT_REPO:-ox1d3x3/uniwrt-luci}"
 TAG="latest"
 ACTIVATE=0
+UPGRADE=0
 GITHUB_PROXY="${GITHUB_PROXY:-https://gh-proxy.com/}"
 
 TMP="$(mktemp -d)" || { printf '[-] cannot create a temp dir\n' >&2; exit 1; }
@@ -29,10 +31,11 @@ err()  { printf '[-] %s\n' "$1" >&2; }
 
 usage() {
 	cat <<-'EOF'
-	usage: sh install.sh [tag] [--activate]
+	usage: sh install.sh [tag] [--activate] [--upgrade]
 
 	  tag         theme release tag to install, default: latest
 	  --activate  switch luci.main.mediaurlbase to /luci-static/uniwrt after install
+	  --upgrade   when the theme is already installed, upgrade it to latest
 
 	Environment:
 	  GITHUB_PROXY=https://gh-proxy.com/  prefix used for GitHub/raw/API downloads
@@ -44,6 +47,9 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 		--activate)
 			ACTIVATE=1
+			;;
+		--upgrade)
+			UPGRADE=1
 			;;
 		-h|--help)
 			usage
@@ -134,6 +140,24 @@ else
 	exit 1
 fi
 ok "Package manager: $PM (preferring .$EXT)"
+
+if [ "$TAG" = "latest" ] && [ "$UPGRADE" = 0 ]; then
+	if { [ "$PM" = "apk" ] && apk info -e luci-theme-uniwrt >/dev/null 2>&1; } ||
+	   { [ "$PM" = "opkg" ] && opkg status luci-theme-uniwrt >/dev/null 2>&1; }; then
+		ok "luci-theme-uniwrt is already installed; leaving its package version unchanged."
+		if [ "$ACTIVATE" = 1 ]; then
+			info "Activating UniWRT..."
+			uci -q set luci.main.mediaurlbase=/luci-static/uniwrt
+			uci -q commit luci
+			rm -f /tmp/luci-indexcache* 2>/dev/null || true
+			rm -rf /tmp/luci-modulecache 2>/dev/null || true
+			[ -x /etc/init.d/rpcd ] && /etc/init.d/rpcd reload >/dev/null 2>&1 || true
+		else
+			info "Use --upgrade to install the latest release, or pass an explicit tag."
+		fi
+		exit 0
+	fi
+fi
 
 command -v jsonfilter >/dev/null 2>&1 || {
 	err "jsonfilter not found — this installer expects an OpenWrt base image."
