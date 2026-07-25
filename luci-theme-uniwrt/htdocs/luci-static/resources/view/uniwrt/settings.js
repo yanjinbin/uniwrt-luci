@@ -70,6 +70,11 @@ return view.extend({
 		o.default = '1';
 		o.rmempty = false;
 
+		o = s.option(form.Flag, 'overview', _('UniWRT Overview page'),
+			_('Show the UniWRT live overview dashboard in the theme menu without replacing LuCI\'s global Overview page.'));
+		o.default = '1';
+		o.rmempty = false;
+
 		return m.render();
 	}
 });

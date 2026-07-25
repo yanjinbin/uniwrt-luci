@@ -106,8 +106,10 @@ return baseclass.extend({
 		var box = document.getElementById('u-rail-modes');
 		if (!box) return;
 		box.innerHTML = '';
+		var hideOverview = document.documentElement.getAttribute('data-uniwrt-overview') === '0';
 		for (var i = 0; i < top.length; i++) {
 			var c = top[i];
+			if (hideOverview && c.name === 'uniwrt-dashboard') continue;
 			var active = (L.env.requestpath.length > (idx || 0)) ? c.name == L.env.requestpath[idx || 0] : i == 0;
 			var a = E('a', {
 				'class': 'u-mode-tab' + (active ? ' active' : ''),
@@ -126,8 +128,10 @@ return baseclass.extend({
 		var group = E('div', { 'class': 'u-nav-group' });
 		var self = this;
 
+		var hideOverview = document.documentElement.getAttribute('data-uniwrt-overview') === '0';
 		for (var i = 0; i < children.length; i++) {
 			var child = children[i];
+			if (hideOverview && child.name === 'uniwrt-dashboard') continue;
 			var subs = ui.menu.getChildren(child);
 			var hasSubs = subs.length > 0;
 			var open = L.env.dispatchpath[1] == child.name;
