@@ -1,6 +1,6 @@
 {
 	"luci-theme-uniwrt": {
-		"description": "Grant access to UniWRT theme settings and overview widgets",
+		"description": "Grant access to UniWRT theme settings and dashboard widgets",
 		"read": {
 			"uci": [ "uniwrt", "luci" ],
 			"ubus": {

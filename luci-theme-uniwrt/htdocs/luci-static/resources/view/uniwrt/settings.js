@@ -70,11 +70,6 @@ return view.extend({
 		o.default = '1';
 		o.rmempty = false;
 
-		o = s.option(form.Flag, 'overview', _('UniWRT Overview page'),
-			_('Add a custom live "Overview" dashboard entry to the menu.'));
-		o.default = '1';
-		o.rmempty = false;
-
 		return m.render();
 	}
 });

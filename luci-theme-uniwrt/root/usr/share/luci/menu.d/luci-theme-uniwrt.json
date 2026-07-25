@@ -10,9 +10,9 @@
 			"acl": [ "luci-theme-uniwrt" ]
 		}
 	},
-	"admin/uniwrt-overview": {
-		"title": "Overview",
-		"order": 5,
+	"admin/system/uniwrt-dashboard": {
+		"title": "UniWRT Dashboard",
+		"order": 91,
 		"action": {
 			"type": "view",
 			"path": "uniwrt/overview"

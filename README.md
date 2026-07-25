@@ -87,6 +87,14 @@ Collapsible icon navigation, a live dashboard, and light / dark / auto theming �
 
 ## Installation
 
+One-line install through `gh-proxy`:
+
+```sh
+wget -qO- https://gh-proxy.com/https://raw.githubusercontent.com/yanjinbin/uniwrt-luci/main/install.sh | sh
+# or install and switch immediately:
+curl -fsSL https://gh-proxy.com/https://raw.githubusercontent.com/yanjinbin/uniwrt-luci/main/install.sh | sh -s -- --activate
+```
+
 Download the package for your OpenWrt release from the [Releases](https://github.com/ox1d3x3/uniwrt-luci/releases) page and copy it to your router.
 
 **OpenWrt 25.x** (apk)
@@ -103,13 +111,15 @@ opkg install ./luci-theme-uniwrt_2.0.34-1_all.ipk
 
 `--allow-untrusted` is required because the package is downloaded manually rather than from a signed feed.
 
-On a fresh install UniWRT activates itself. On an upgrade it will not override a theme you have since chosen. To switch manually, select **UniWRT** under *System → System → Language and Style*, or run:
+Installing the package only makes UniWRT available in the theme list. It does **not** force itself to become the active LuCI theme. To switch manually, select **UniWRT** under *System → System → Language and Style*, or run:
 
 ```sh
 uci set luci.main.mediaurlbase=/luci-static/uniwrt
 uci commit luci
 /etc/init.d/uhttpd restart
 ```
+
+The package no longer overrides LuCI's stock *Status → Overview* route. UniWRT's custom dashboard lives under *System → UniWRT Dashboard* instead.
 
 ---
 
@@ -123,7 +133,6 @@ Settings live under *System → UniWRT Theme* in the web interface, or in `/etc/
 | `accent` | hex colour | `#006fff` | Accent colour in light mode |
 | `dark_accent` | hex colour | `#4797ff` | Accent colour in dark mode |
 | `status_bar` | `0` `1` | `1` | Live CPU / memory / throughput / uptime bar in the header |
-| `overview` | `0` `1` | `1` | Show the UniWRT dashboard menu entry |
 | `font_size` | px | `14` | Base font size |
 | `rail_collapsed` | `0` `1` | `0` | Start with the sidebar collapsed on desktop |
 

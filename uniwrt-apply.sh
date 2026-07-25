@@ -5,7 +5,8 @@
 # luci-theme-uniwrt .apk (OpenWrt 25.12+) or .ipk (23.05 / 24.10).
 #
 # It auto-detects the package manager, installs the matching package,
-# activates the theme, clears the LuCI cache and restarts the web UI.
+# keeps UniWRT selectable in LuCI, and optionally activates it when
+# explicitly requested with --activate.
 #
 set -eu
 
@@ -14,6 +15,15 @@ err() { printf '\033[1;31m[uniwrt]\033[0m %s\n' "$*" >&2; }
 
 DIR="$(dirname "$0")"
 cd "$DIR"
+ACTIVATE=0
+
+if [ "${1-}" = "--activate" ]; then
+	ACTIVATE=1
+elif [ $# -gt 0 ]; then
+	err "unknown argument: $1"
+	err "usage: $0 [--activate]"
+	exit 1
+fi
 
 install_pkg() {
 	if command -v apk >/dev/null 2>&1; then
@@ -34,11 +44,6 @@ install_pkg() {
 
 install_pkg
 
-say "Activating UniWRT theme"
-uci -q set luci.themes.UniWRT=/luci-static/uniwrt
-uci -q set luci.main.mediaurlbase=/luci-static/uniwrt
-uci -q commit luci
-
 say "Clearing LuCI cache"
 rm -f /tmp/luci-indexcache /tmp/luci-modulecache 2>/dev/null || true
 
@@ -49,4 +54,15 @@ if [ -x /etc/init.d/uhttpd ]; then
 	/etc/init.d/uhttpd restart 2>/dev/null || true
 fi
 
-say "Done. Reload the LuCI page in your browser (Ctrl/Cmd+Shift+R)."
+if [ "$ACTIVATE" -eq 1 ]; then
+	say "Activating UniWRT theme"
+	uci -q set luci.main.mediaurlbase=/luci-static/uniwrt
+	uci -q commit luci
+	if [ -x /etc/init.d/uhttpd ]; then
+		/etc/init.d/uhttpd restart 2>/dev/null || true
+	fi
+	say "Done. Reload the LuCI page in your browser (Ctrl/Cmd+Shift+R)."
+else
+	say "Done. UniWRT is installed but not activated."
+	say "Switch it later in LuCI, or rerun: $0 --activate"
+fi

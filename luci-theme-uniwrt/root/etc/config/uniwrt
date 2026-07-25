@@ -7,8 +7,6 @@ config global 'global'
 	option dark_accent '#4797ff'
 	# Show the live status bar (CPU / RAM / throughput / uptime) in the header
 	option status_bar '1'
-	# Show the custom UniWRT overview dashboard menu entry
-	option overview '1'
 	# Base font size in px
 	option font_size '14'
 	# Start with the navigation rail collapsed on desktop

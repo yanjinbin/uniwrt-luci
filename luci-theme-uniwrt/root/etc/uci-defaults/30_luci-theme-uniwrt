@@ -1,12 +1,8 @@
 #!/bin/sh
 
-# Always keep UniWRT in the selectable theme list.
+# Keep UniWRT in the selectable theme list, but never force it as the
+# active LuCI theme during install or upgrade.
 uci -q set luci.themes.UniWRT=/luci-static/uniwrt
-
-# Make it the active theme only on a FRESH install — never stomp the
-# user's chosen theme on a package upgrade.
-[ "$PKG_UPGRADE" = 1 ] || uci -q set luci.main.mediaurlbase=/luci-static/uniwrt
-
 uci -q commit luci
 rm -f /tmp/luci-indexcache /tmp/luci-modulecache 2>/dev/null
 
