@@ -8,15 +8,15 @@
 # Optional:
 #   ... | sh -s -- --activate
 #   ... | sh -s -- --upgrade
-#   ... | sh -s -- v2.0.34
-#   ... | sh -s -- v2.0.34 --activate
+#   ... | sh -s -- v2.0.35
+#   ... | sh -s -- v2.0.35 --activate
 #
 # GitHub downloads go through gh-proxy.com by default; override with GITHUB_PROXY=... or disable
 # with GITHUB_PROXY=.
 
 set -eu
 
-REPO="${UNIWRT_REPO:-ox1d3x3/uniwrt-luci}"
+REPO="${UNIWRT_REPO:-yanjinbin/uniwrt-luci}"
 TAG="latest"
 ACTIVATE=0
 UPGRADE=0
@@ -39,7 +39,7 @@ usage() {
 
 	Environment:
 	  GITHUB_PROXY=https://gh-proxy.com/  prefix used for GitHub/raw/API downloads
-	  UNIWRT_REPO=owner/repo              release repository to query, default upstream
+	  UNIWRT_REPO=owner/repo              release repository to query, default: yanjinbin/uniwrt-luci
 	EOF
 }
 

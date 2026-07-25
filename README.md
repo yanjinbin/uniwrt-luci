@@ -10,14 +10,14 @@
 
 Collapsible icon navigation, a live dashboard, and light / dark / auto theming — in a single package with no external dependencies.
 
-[![Build](https://github.com/ox1d3x3/uniwrt-luci/actions/workflows/build.yml/badge.svg)](https://github.com/ox1d3x3/uniwrt-luci/actions/workflows/build.yml)
-[![Release](https://img.shields.io/github/v/release/ox1d3x3/uniwrt-luci?include_prereleases&color=006fff)](https://github.com/ox1d3x3/uniwrt-luci/releases)
-[![Downloads](https://img.shields.io/github/downloads/ox1d3x3/uniwrt-luci/total?color=006fff&label=downloads)](https://github.com/ox1d3x3/uniwrt-luci/releases)
-[![Stars](https://img.shields.io/github/stars/ox1d3x3/uniwrt-luci?color=006fff)](https://github.com/ox1d3x3/uniwrt-luci/stargazers)
+[![Build](https://github.com/yanjinbin/uniwrt-luci/actions/workflows/build.yml/badge.svg)](https://github.com/yanjinbin/uniwrt-luci/actions/workflows/build.yml)
+[![Release](https://img.shields.io/github/v/release/yanjinbin/uniwrt-luci?include_prereleases&color=006fff)](https://github.com/yanjinbin/uniwrt-luci/releases)
+[![Downloads](https://img.shields.io/github/downloads/yanjinbin/uniwrt-luci/total?color=006fff&label=downloads)](https://github.com/yanjinbin/uniwrt-luci/releases)
+[![Stars](https://img.shields.io/github/stars/yanjinbin/uniwrt-luci?color=006fff)](https://github.com/yanjinbin/uniwrt-luci/stargazers)
 [![License](https://img.shields.io/github/license/ox1d3x3/uniwrt-luci?color=blue)](./LICENSE)
 ![OpenWrt](https://img.shields.io/badge/OpenWrt-23.05%20%7C%2024.10%20%7C%2025.x-orange)
 
-[Install](#installation) · [Configure](#configuration) · [FAQ](#faq--troubleshooting) · [Releases](https://github.com/ox1d3x3/uniwrt-luci/releases)
+[Install](#installation) · [Configure](#configuration) · [FAQ](#faq--troubleshooting) · [Releases](https://github.com/yanjinbin/uniwrt-luci/releases)
 
 </div>
 
@@ -95,18 +95,18 @@ wget -qO- https://gh-proxy.com/https://raw.githubusercontent.com/yanjinbin/uniwr
 curl -fsSL https://gh-proxy.com/https://raw.githubusercontent.com/yanjinbin/uniwrt-luci/main/install.sh | sh -s -- --activate
 ```
 
-Download the package for your OpenWrt release from the [Releases](https://github.com/ox1d3x3/uniwrt-luci/releases) page and copy it to your router.
+Download the package for your OpenWrt release from the [Releases](https://github.com/yanjinbin/uniwrt-luci/releases) page and copy it to your router.
 
 **OpenWrt 25.x** (apk)
 
 ```sh
-apk add --allow-untrusted ./luci-theme-uniwrt-2.0.34-r1.apk
+apk add --allow-untrusted ./luci-theme-uniwrt-2.0.35-r1.apk
 ```
 
 **OpenWrt 24.10 / 23.05** (opkg)
 
 ```sh
-opkg install ./luci-theme-uniwrt_2.0.34-1_all.ipk
+opkg install ./luci-theme-uniwrt_2.0.35-1_all.ipk
 ```
 
 `--allow-untrusted` is required because the package is downloaded manually rather than from a signed feed.
@@ -267,7 +267,7 @@ Before opening a pull request, run the static checks:
 
 ## Changelog
 
-Release notes for every version are published on the [Releases](https://github.com/ox1d3x3/uniwrt-luci/releases) page.
+Release notes for every version are published on the [Releases](https://github.com/yanjinbin/uniwrt-luci/releases) page.
 
 ---
 
