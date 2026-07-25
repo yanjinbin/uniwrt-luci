@@ -66,6 +66,18 @@
     @media (prefers-color-scheme: dark){ html:not([data-theme="light"]){ --u-accent:{{ u_dark_accent }}; } }
   </style>
   <script>
+  /* Theme-local home route: keep LuCI's global admin firstchild untouched, but
+     make UniWRT's own shell land on its dashboard when the user opens /admin. */
+  (function(){
+    if (document.documentElement.getAttribute('data-uniwrt-overview') === '0')
+      return;
+    var adminPath = "{{ dispatcher.build_url('admin') }}";
+    var dashPath = "{{ dispatcher.build_url('admin/system/uniwrt-dashboard') }}";
+    function norm(p){ return String(p || '').replace(/\/+$/, ''); }
+    if (norm(window.location.pathname) === norm(adminPath))
+      window.location.replace(dashPath);
+  })();
+
   /* Resolve theme before paint to avoid a flash. Precedence: user override
      stored in localStorage, otherwise the server-side config default. */
   (function(){
