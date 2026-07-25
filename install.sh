@@ -66,13 +66,8 @@ while [ $# -gt 0 ]; do
 	shift
 done
 
-fetch() {
+fetch_once() {
 	_u="$1"; _t="$2"; _o="$3"
-	case "$_u" in
-		https://github.com/*|https://api.github.com/*|https://objects.githubusercontent.com/*|https://release-assets.githubusercontent.com/*|https://raw.githubusercontent.com/*)
-			[ -n "$GITHUB_PROXY" ] && _u="${GITHUB_PROXY}${_u}"
-			;;
-	esac
 	if command -v uclient-fetch >/dev/null 2>&1; then
 		if [ -n "$_o" ]; then uclient-fetch -T "$_t" -qO "$_o" "$_u" 2>/dev/null
 		else uclient-fetch -T "$_t" -qO- "$_u" 2>/dev/null; fi
@@ -94,6 +89,24 @@ fetch() {
 		return $?
 	fi
 	return 1
+}
+
+fetch() {
+	_u="$1"; _t="$2"; _o="$3"; _try="$_u"; _proxied=''
+	case "$_u" in
+		https://github.com/*|https://api.github.com/*|https://objects.githubusercontent.com/*|https://release-assets.githubusercontent.com/*|https://raw.githubusercontent.com/*)
+			[ -n "$GITHUB_PROXY" ] && _proxied="${GITHUB_PROXY}${_u}"
+			;;
+	esac
+	if [ -n "$_proxied" ]; then
+		if fetch_once "$_proxied" "$_t" "$_o"; then
+			if [ -z "$_o" ] || [ -s "$_o" ]; then
+				return 0
+			fi
+		fi
+		[ -n "$_o" ] && rm -f "$_o"
+	fi
+	fetch_once "$_try" "$_t" "$_o"
 }
 
 asset_urls() {
