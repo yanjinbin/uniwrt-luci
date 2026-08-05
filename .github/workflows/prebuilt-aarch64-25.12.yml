@@ -1,0 +1,58 @@
+name: Prebuilt luci-theme-uniwrt (aarch64 25.12)
+
+# 为 ImmortalWrt-ImageBuilder 预编译 luci-theme-uniwrt (aarch64_generic / openwrt-25.12),
+# 发布为 release 资产, ImageBuilder 直接下载使用, 避免每次固件构建都跑 SDK 编译。
+# release 标签携带源码 commit hash, 支持 latest 或指定版本下载:
+#   latest:   https://github.com/yanjinbin/uniwrt-luci/releases/latest/download/luci-theme-uniwrt-aarch64_generic-openwrt-25.12.tar.gz
+#   指定版本: https://github.com/yanjinbin/uniwrt-luci/releases/download/<tag>/luci-theme-uniwrt-aarch64_generic-openwrt-25.12.tar.gz
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: 计算短 commit
+        id: commit
+        run: echo "short=${GITHUB_SHA:0:7}" >> "$GITHUB_OUTPUT"
+
+      - name: SDK 编译 luci-theme-uniwrt (aarch64_generic / 25.12)
+        uses: openwrt/gh-action-sdk@main
+        env:
+          ARCH: aarch64_generic-25.12.4
+          FEEDNAME: uniwrt
+          PACKAGES: luci-theme-uniwrt
+          INDEX: 1
+          NO_REFRESH_CHECK: true
+          V: s
+
+      - name: 打包 apk 为 tarball
+        run: |
+          set -euo pipefail
+          find bin/packages -type f -name '*.apk' | sort
+          [ -d bin/packages/aarch64_generic/uniwrt ] || { echo "未找到 bin/packages/aarch64_generic/uniwrt"; exit 1; }
+          echo "$GITHUB_SHA" > bin/packages/aarch64_generic/uniwrt/commit.txt
+          tar -c -z -f luci-theme-uniwrt-aarch64_generic-openwrt-25.12.tar.gz -C bin/packages/aarch64_generic/uniwrt .
+          ls -lah luci-theme-uniwrt-aarch64_generic-openwrt-25.12.tar.gz
+
+      - name: 清理同名旧 release (同 commit 重跑)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release delete "prebuilt-aarch64-25.12-${{ steps.commit.outputs.short }}" --yes --cleanup-tag || true
+
+      - name: 发布预编译包
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: prebuilt-aarch64-25.12-${{ steps.commit.outputs.short }}
+          name: "uniwrt-luci prebuilt aarch64 25.12 @ ${{ steps.commit.outputs.short }}"
+          body: |
+            yanjinbin/uniwrt-luci commit `${{ github.sha }}` 编译的预编译包 (aarch64_generic / openwrt-25.12)
+            下载: releases/latest/download/luci-theme-uniwrt-aarch64_generic-openwrt-25.12.tar.gz
+          files: luci-theme-uniwrt-aarch64_generic-openwrt-25.12.tar.gz
